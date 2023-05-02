@@ -11,23 +11,22 @@ namespace AndreTurismoApp.Services
 
         public async Task<Client> Insert(Client client)
         {
-            HttpContent contentAddress = new StringContent(JsonConvert.SerializeObject(client.Address), Encoding.UTF8, "application/json");
-            try
-            {
-                HttpResponseMessage response = await clientClient.PostAsync("https://localhost:5001/api/Addresses", contentAddress);
-                response.EnsureSuccessStatusCode();
-                string hotelResp = await response.Content.ReadAsStringAsync();
-                client.Address = JsonConvert.DeserializeObject<Address>(hotelResp);
-            }
-            catch (HttpRequestException e)
-            {
-                throw;
-            }
+            //HttpContent contentAddress = new StringContent(JsonConvert.SerializeObject(client.Address), Encoding.UTF8, "application/json");
+            //try
+            //{
+            //    HttpResponseMessage response = await clientClient.PostAsync("https://localhost:5001/api/Addresses", contentAddress);
+            //    response.EnsureSuccessStatusCode();
+            //    string hotelResp = await response.Content.ReadAsStringAsync();
+            //    client.Address = JsonConvert.DeserializeObject<Address>(hotelResp);
+            //}
+            //catch (HttpRequestException e)
+            //{
+            //    throw;
+            //}
 
-            HttpContent content = new StringContent(JsonConvert.SerializeObject(client), Encoding.UTF8, "application/json");
             try
             {
-                HttpResponseMessage response = await clientClient.PostAsync(endpoint, content);
+                HttpResponseMessage response = await clientClient.PostAsJsonAsync(endpoint, client);
                 response.EnsureSuccessStatusCode();
                 string clientResp = await response.Content.ReadAsStringAsync();
                 return JsonConvert.DeserializeObject<Client>(clientResp);

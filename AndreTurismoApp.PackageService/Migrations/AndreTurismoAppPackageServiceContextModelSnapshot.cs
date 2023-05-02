@@ -164,11 +164,14 @@ namespace AndreTurismoApp.PackageService.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ClientId");
+                    b.HasIndex("ClientId")
+                        .IsUnique();
 
-                    b.HasIndex("HotelId");
+                    b.HasIndex("HotelId")
+                        .IsUnique();
 
-                    b.HasIndex("TicketId");
+                    b.HasIndex("TicketId")
+                        .IsUnique();
 
                     b.ToTable("Package");
                 });
@@ -198,11 +201,14 @@ namespace AndreTurismoApp.PackageService.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ClientId");
+                    b.HasIndex("ClientId")
+                        .IsUnique();
 
-                    b.HasIndex("DestinationId");
+                    b.HasIndex("DestinationId")
+                        .IsUnique();
 
-                    b.HasIndex("OriginId");
+                    b.HasIndex("OriginId")
+                        .IsUnique();
 
                     b.ToTable("Ticket");
                 });
@@ -243,21 +249,21 @@ namespace AndreTurismoApp.PackageService.Migrations
             modelBuilder.Entity("AndreTurismoApp.Models.Package", b =>
                 {
                     b.HasOne("AndreTurismoApp.Models.Client", "Client")
-                        .WithMany()
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .WithOne()
+                        .HasForeignKey("AndreTurismoApp.Models.Package", "ClientId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("AndreTurismoApp.Models.Hotel", "Hotel")
-                        .WithMany()
-                        .HasForeignKey("HotelId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .WithOne()
+                        .HasForeignKey("AndreTurismoApp.Models.Package", "HotelId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("AndreTurismoApp.Models.Ticket", "Ticket")
-                        .WithMany()
-                        .HasForeignKey("TicketId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .WithOne()
+                        .HasForeignKey("AndreTurismoApp.Models.Package", "TicketId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Client");
@@ -270,21 +276,21 @@ namespace AndreTurismoApp.PackageService.Migrations
             modelBuilder.Entity("AndreTurismoApp.Models.Ticket", b =>
                 {
                     b.HasOne("AndreTurismoApp.Models.Client", "Client")
-                        .WithMany()
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .WithOne()
+                        .HasForeignKey("AndreTurismoApp.Models.Ticket", "ClientId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("AndreTurismoApp.Models.Address", "Destination")
-                        .WithMany()
-                        .HasForeignKey("DestinationId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .WithOne()
+                        .HasForeignKey("AndreTurismoApp.Models.Ticket", "DestinationId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.HasOne("AndreTurismoApp.Models.Address", "Origin")
-                        .WithMany()
-                        .HasForeignKey("OriginId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .WithOne()
+                        .HasForeignKey("AndreTurismoApp.Models.Ticket", "OriginId")
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Client");

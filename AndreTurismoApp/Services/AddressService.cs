@@ -57,10 +57,9 @@ namespace AndreTurismoApp.Services
 
         public async Task<Address> Update(int id, Address newAddress)
         {
-            HttpContent content = new StringContent(JsonConvert.SerializeObject(newAddress), Encoding.UTF8, "application/json");
             try
             {
-                HttpResponseMessage response = await addressClient.PutAsync("https://localhost:5001/api/Addresses/" + id, content);
+                HttpResponseMessage response = await addressClient.PutAsJsonAsync("https://localhost:5001/api/Addresses/" + id, newAddress);
                 response.EnsureSuccessStatusCode();
                 string addressResp = await response.Content.ReadAsStringAsync();
                 return JsonConvert.DeserializeObject<Address>(addressResp);

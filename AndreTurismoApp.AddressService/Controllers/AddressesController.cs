@@ -74,7 +74,15 @@ namespace AndreTurismoApp.AddressService.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(address).State = EntityState.Modified;
+            var newAddress = await _context.Address.Include(a => a.City).Where(a => a.Id == id).FirstOrDefaultAsync();
+            newAddress.Street = address.Street;
+            newAddress.City = address.City;
+            newAddress.PostalCode = address.PostalCode;
+            newAddress.Number = address.Number;
+            newAddress.Neighborhood = address.Neighborhood;
+            newAddress.Complement = address.Complement;
+
+            _context.Entry(newAddress).State = EntityState.Modified;
 
             try
             {

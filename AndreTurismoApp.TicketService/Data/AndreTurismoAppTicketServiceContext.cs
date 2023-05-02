@@ -18,5 +18,12 @@ namespace AndreTurismoApp.TicketService.Data
         public DbSet<AndreTurismoApp.Models.City> City { get; set; } = default!;
         public DbSet<AndreTurismoApp.Models.Address> Address { get; set; } = default!;
         public DbSet<AndreTurismoApp.Models.Client> Client { get; set; } = default!;
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Ticket>().HasOne(t => t.Origin).WithOne().HasForeignKey<Ticket>("OriginId").OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<Ticket>().HasOne(t => t.Destination).WithOne().HasForeignKey<Ticket>("DestinationId").OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<Ticket>().HasOne(t => t.Client).WithOne().HasForeignKey<Ticket>("ClientId").OnDelete(DeleteBehavior.NoAction);
+        }
     }
 }
