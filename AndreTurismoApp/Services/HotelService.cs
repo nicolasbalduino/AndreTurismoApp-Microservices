@@ -1,0 +1,101 @@
+﻿using AndreTurismoApp.Models;
+using Newtonsoft.Json;
+using System.Text;
+
+namespace AndreTurismoApp.Services
+{
+    public class HotelService
+    {
+        static readonly HttpClient hotelClient = new HttpClient();
+        static readonly string endpoint = "https://localhost:5003/api/hotels/";
+
+        public async Task<Hotel> Insert(Hotel hotel)
+        {
+            HttpContent contentAddress = new StringContent(JsonConvert.SerializeObject(hotel.Address), Encoding.UTF8, "application/json");
+            try
+            {
+                HttpResponseMessage response = await hotelClient.PostAsync("https://localhost:5001/api/Addresses", contentAddress);
+                response.EnsureSuccessStatusCode();
+                string addressResp = await response.Content.ReadAsStringAsync();
+                hotel.Address = JsonConvert.DeserializeObject<Address>(addressResp);
+            }
+            catch (HttpRequestException e)
+            {
+                throw;
+            }
+
+            HttpContent content = new StringContent(JsonConvert.SerializeObject(hotel), Encoding.UTF8, "application/json");
+            try
+            {
+                HttpResponseMessage response = await hotelClient.PostAsync(endpoint, content);
+                response.EnsureSuccessStatusCode();
+                string hotelResp = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<Hotel>(hotelResp);
+            }
+            catch (HttpRequestException e)
+            {
+                throw;
+            }
+        }
+
+        public async Task<List<Hotel>> FindAll()
+        {
+            try
+            {
+                HttpResponseMessage response = await hotelClient.GetAsync(endpoint);
+                response.EnsureSuccessStatusCode();
+                string hotel = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<List<Hotel>>(hotel);
+            }
+            catch (HttpRequestException e)
+            {
+                throw;
+            }
+        }
+
+        public async Task<Hotel> FindById(int id)
+        {
+            try
+            {
+                HttpResponseMessage response = await hotelClient.GetAsync(endpoint + id);
+                response.EnsureSuccessStatusCode();
+                string hotel = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<Hotel>(hotel);
+            }
+            catch (HttpRequestException e)
+            {
+                throw;
+            }
+        }
+
+        public async Task<Hotel> Update(int id, Hotel newHotel)
+        {
+            HttpContent content = new StringContent(JsonConvert.SerializeObject(newHotel), Encoding.UTF8, "application/json");
+            try
+            {
+                HttpResponseMessage response = await hotelClient.PutAsync(endpoint + id, content);
+                response.EnsureSuccessStatusCode();
+                string hotelResp = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<Hotel>(hotelResp);
+            }
+            catch (HttpRequestException e)
+            {
+                throw;
+            }
+        }
+
+        public async Task Delete(int id)
+        {
+            try
+            {
+                HttpResponseMessage response = await hotelClient.DeleteAsync(endpoint + id);
+                response.EnsureSuccessStatusCode();
+                string hotel = await response.Content.ReadAsStringAsync();
+            }
+            catch (HttpRequestException e)
+            {
+                throw;
+            }
+        }
+    }
+}
