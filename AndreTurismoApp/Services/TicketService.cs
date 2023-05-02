@@ -11,44 +11,44 @@ namespace AndreTurismoApp.Services
 
         public async Task<Ticket> Insert(Ticket ticket)
         {
-            HttpContent contentOrigin = new StringContent(JsonConvert.SerializeObject(ticket.Origin), Encoding.UTF8, "application/json");
-            try
-            {
-                HttpResponseMessage response = await ticketClient.PostAsync("https://localhost:5001/api/Addresses", contentOrigin);
-                response.EnsureSuccessStatusCode();
-                string addressResp = await response.Content.ReadAsStringAsync();
-                ticket.Origin = JsonConvert.DeserializeObject<Address>(addressResp);
-            }
-            catch (HttpRequestException e)
-            {
-                throw;
-            }
+            //HttpContent contentOrigin = new StringContent(JsonConvert.SerializeObject(ticket.Origin), Encoding.UTF8, "application/json");
+            //try
+            //{
+            //    HttpResponseMessage response = await ticketClient.PostAsync("https://localhost:5001/api/Addresses", contentOrigin);
+            //    response.EnsureSuccessStatusCode();
+            //    string addressResp = await response.Content.ReadAsStringAsync();
+            //    ticket.Origin = JsonConvert.DeserializeObject<Address>(addressResp);
+            //}
+            //catch (HttpRequestException e)
+            //{
+            //    throw;
+            //}
 
-            HttpContent contentDestination = new StringContent(JsonConvert.SerializeObject(ticket.Destination), Encoding.UTF8, "application/json");
-            try
-            {
-                HttpResponseMessage response = await ticketClient.PostAsync("https://localhost:5001/api/Addresses", contentDestination);
-                response.EnsureSuccessStatusCode();
-                string addressResp = await response.Content.ReadAsStringAsync();
-                ticket.Destination = JsonConvert.DeserializeObject<Address>(addressResp);
-            }
-            catch (HttpRequestException e)
-            {
-                throw;
-            }
+            //HttpContent contentDestination = new StringContent(JsonConvert.SerializeObject(ticket.Destination), Encoding.UTF8, "application/json");
+            //try
+            //{
+            //    HttpResponseMessage response = await ticketClient.PostAsync("https://localhost:5001/api/Addresses", contentDestination);
+            //    response.EnsureSuccessStatusCode();
+            //    string addressResp = await response.Content.ReadAsStringAsync();
+            //    ticket.Destination = JsonConvert.DeserializeObject<Address>(addressResp);
+            //}
+            //catch (HttpRequestException e)
+            //{
+            //    throw;
+            //}
 
-            HttpContent contentClient = new StringContent(JsonConvert.SerializeObject(ticket.Client), Encoding.UTF8, "application/json");
-            try
-            {
-                HttpResponseMessage response = await ticketClient.PostAsync("https://localhost:5004/api/clients", contentClient);
-                response.EnsureSuccessStatusCode();
-                string addressResp = await response.Content.ReadAsStringAsync();
-                ticket.Client = JsonConvert.DeserializeObject<Client>(addressResp);
-            }
-            catch (HttpRequestException e)
-            {
-                throw;
-            }
+            //HttpContent contentClient = new StringContent(JsonConvert.SerializeObject(ticket.Client), Encoding.UTF8, "application/json");
+            //try
+            //{
+            //    HttpResponseMessage response = await ticketClient.PostAsync("https://localhost:5004/api/clients", contentClient);
+            //    response.EnsureSuccessStatusCode();
+            //    string addressResp = await response.Content.ReadAsStringAsync();
+            //    ticket.Client = JsonConvert.DeserializeObject<Client>(addressResp);
+            //}
+            //catch (HttpRequestException e)
+            //{
+            //    throw;
+            //}
 
             HttpContent content = new StringContent(JsonConvert.SerializeObject(ticket), Encoding.UTF8, "application/json");
             try
