@@ -11,23 +11,21 @@ namespace AndreTurismoApp.Services
 
         public async Task<Hotel> Insert(Hotel hotel)
         {
-            HttpContent contentAddress = new StringContent(JsonConvert.SerializeObject(hotel.Address), Encoding.UTF8, "application/json");
-            try
-            {
-                HttpResponseMessage response = await hotelClient.PostAsync("https://localhost:5001/api/Addresses", contentAddress);
-                response.EnsureSuccessStatusCode();
-                string addressResp = await response.Content.ReadAsStringAsync();
-                hotel.Address = JsonConvert.DeserializeObject<Address>(addressResp);
-            }
-            catch (HttpRequestException e)
-            {
-                throw;
-            }
+            //try
+            //{
+            //    HttpResponseMessage response = await hotelClient.PostAsJsonAsync("https://localhost:5001/api/Addresses", hotel.Address);
+            //    response.EnsureSuccessStatusCode();
+            //    string addressResp = await response.Content.ReadAsStringAsync();
+            //    hotel.Address = JsonConvert.DeserializeObject<Address>(addressResp);
+            //}
+            //catch (HttpRequestException e)
+            //{
+            //    throw;
+            //}
 
-            HttpContent content = new StringContent(JsonConvert.SerializeObject(hotel), Encoding.UTF8, "application/json");
             try
             {
-                HttpResponseMessage response = await hotelClient.PostAsync(endpoint, content);
+                HttpResponseMessage response = await hotelClient.PostAsJsonAsync(endpoint, hotel);
                 response.EnsureSuccessStatusCode();
                 string hotelResp = await response.Content.ReadAsStringAsync();
                 return JsonConvert.DeserializeObject<Hotel>(hotelResp);

@@ -53,9 +53,7 @@ namespace AndreTurismoApp.Services
             //HttpContent content = new StringContent(JsonConvert.SerializeObject(package), Encoding.UTF8, "application/json");
             try
             {
-                //HttpResponseMessage response = await packageClient.PostAsync("https://localhost:5006/api/packages/", content);
-                HttpResponseMessage response = new HttpResponseMessage();
-                 response = await packageClient.PostAsJsonAsync(endpoint, package);
+                HttpResponseMessage response = await packageClient.PostAsJsonAsync(endpoint, package);
                 response.EnsureSuccessStatusCode();
                 string packageResp = await response.Content.ReadAsStringAsync();
                 return JsonConvert.DeserializeObject<Package>(packageResp);

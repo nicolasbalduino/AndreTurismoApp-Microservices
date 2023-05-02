@@ -17,5 +17,10 @@ namespace AndreTurismoApp.HotelService.Data
         public DbSet<AndreTurismoApp.Models.Hotel> Hotel { get; set; } = default!;
         public DbSet<AndreTurismoApp.Models.Address> Address { get; set; } = default!;
         public DbSet<AndreTurismoApp.Models.City> City { get; set; } = default!;
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Hotel>().HasOne(h => h.Address).WithOne().HasForeignKey<Hotel>("AddressId").OnDelete(DeleteBehavior.NoAction);
+        }
     }
 }

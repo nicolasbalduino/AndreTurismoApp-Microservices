@@ -21,4 +21,8 @@
     <ProjectReference Include="..\AndreTurismoApp.Services\AndreTurismoApp.Services.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
+
 </Project>
