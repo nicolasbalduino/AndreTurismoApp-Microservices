@@ -11,11 +11,13 @@ namespace AndreTurismoApp.Controllers
     {
         private AddressService _addressService;
         private CityService _cityService;
+        private PostOfficesService _postOfficeService;
 
         public AddressController()
         {
             _addressService = new AddressService();
             _cityService = new CityService();
+            _postOfficeService = new PostOfficesService();
         }
 
         [HttpGet]
@@ -25,7 +27,21 @@ namespace AndreTurismoApp.Controllers
         public async Task<Address> ConsultarPorId(int id) => await _addressService.FindById(id);
 
         [HttpPost]
-        public async Task<Address> Inserir(Address address) => await _addressService.Insert(address);
+        public async Task<ActionResult<Address>> Inserir(Address address)
+        {
+            if (address.PostalCode != "")
+            {
+                var infoPc = _postOfficeService.GetAddress(address.PostalCode).Result;
+                address.Street = infoPc.Logradouro != "" ? infoPc.Logradouro :  address.Street;
+                address.Neighborhood = infoPc.Bairro != "" ? infoPc.Bairro : address.Neighborhood;
+                address.City.Description = infoPc.City;
+            }
+
+            City searchCity = await _cityService.FindByName(address.City.Description);
+            if (searchCity != null) address.City.Id = searchCity.Id;
+
+            return await _addressService.Insert(address);
+        }
 
         [HttpPut("{id}")]
         public async Task<Address> Atualizar(int id, Address address)
