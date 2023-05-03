@@ -8,13 +8,25 @@ namespace AndreTurismoApp.Services
     public class AddressService
     {
         static readonly HttpClient addressClient = new HttpClient();
+        static readonly string endpoint = "https://localhost:5001/api/Addresses/";
+        static readonly PostOfficesService _postOfficeService = new PostOfficesService();
+        static readonly CityService _cityService = new CityService();
 
         public async Task<Address> Insert(Address address)
         {
-            HttpContent content = new StringContent(JsonConvert.SerializeObject(address), Encoding.UTF8, "application/json");
+            if (address.PostalCode != "")
+            {
+                var infoPc = _postOfficeService.GetAddress(address.PostalCode).Result;
+                address.Street = infoPc.Logradouro != "" ? infoPc.Logradouro : address.Street;
+                address.Neighborhood = infoPc.Bairro != "" ? infoPc.Bairro : address.Neighborhood;
+                address.City.Description = infoPc.City;
+            }
+            City searchCity = await _cityService.FindByName(address.City.Description);
+            if (searchCity != null) address.City.Id = searchCity.Id;
+
             try
             {
-                HttpResponseMessage response = await addressClient.PostAsync("https://localhost:5001/api/Addresses", content);
+                HttpResponseMessage response = await addressClient.PostAsJsonAsync(endpoint, address);
                 response.EnsureSuccessStatusCode();
                 string addressResp = await response.Content.ReadAsStringAsync();
                 return JsonConvert.DeserializeObject<Address>(addressResp);

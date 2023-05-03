@@ -29,16 +29,16 @@ namespace AndreTurismoApp.Controllers
         [HttpPost]
         public async Task<ActionResult<Address>> Inserir(Address address)
         {
-            if (address.PostalCode != "")
-            {
-                var infoPc = _postOfficeService.GetAddress(address.PostalCode).Result;
-                address.Street = infoPc.Logradouro != "" ? infoPc.Logradouro :  address.Street;
-                address.Neighborhood = infoPc.Bairro != "" ? infoPc.Bairro : address.Neighborhood;
-                address.City.Description = infoPc.City;
-            }
+            //if (address.PostalCode != "")
+            //{
+            //    var infoPc = _postOfficeService.GetAddress(address.PostalCode).Result;
+            //    address.Street = infoPc.Logradouro != "" ? infoPc.Logradouro :  address.Street;
+            //    address.Neighborhood = infoPc.Bairro != "" ? infoPc.Bairro : address.Neighborhood;
+            //    address.City.Description = infoPc.City;
+            //}
 
-            City searchCity = await _cityService.FindByName(address.City.Description);
-            if (searchCity != null) address.City.Id = searchCity.Id;
+            //City searchCity = await _cityService.FindByName(address.City.Description);
+            //if (searchCity != null) address.City.Id = searchCity.Id;
 
             return await _addressService.Insert(address);
         }
