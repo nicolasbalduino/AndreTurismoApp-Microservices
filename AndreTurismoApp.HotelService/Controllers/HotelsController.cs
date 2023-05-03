@@ -101,7 +101,6 @@ namespace AndreTurismoApp.HotelService.Controllers
                 address = new Address();
                 address = hotel.Address;
             }
-
             hotel.Address = address;
 
             _context.Hotel.Add(hotel);

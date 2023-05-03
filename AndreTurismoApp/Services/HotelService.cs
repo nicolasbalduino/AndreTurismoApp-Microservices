@@ -7,21 +7,14 @@ namespace AndreTurismoApp.Services
     public class HotelService
     {
         static readonly HttpClient hotelClient = new HttpClient();
+        static readonly AddressService _addressService = new AddressService();
         static readonly string endpoint = "https://localhost:5003/api/hotels/";
 
         public async Task<Hotel> Insert(Hotel hotel)
         {
-            //try
-            //{
-            //    HttpResponseMessage response = await hotelClient.PostAsJsonAsync("https://localhost:5001/api/Addresses", hotel.Address);
-            //    response.EnsureSuccessStatusCode();
-            //    string addressResp = await response.Content.ReadAsStringAsync();
-            //    hotel.Address = JsonConvert.DeserializeObject<Address>(addressResp);
-            //}
-            //catch (HttpRequestException e)
-            //{
-            //    throw;
-            //}
+            Address hoteladdress = await _addressService.Insert(hotel.Address);
+            if (hoteladdress == null) return null;
+            hotel.Address = hoteladdress;
 
             try
             {
