@@ -21,8 +21,10 @@ namespace AndreTurismoApp.Services
                 address.Neighborhood = infoPc.Bairro != "" ? infoPc.Bairro : address.Neighborhood;
                 address.City.Description = infoPc.City;
             }
+
             City searchCity = await _cityService.FindByName(address.City.Description);
-            if (searchCity != null) address.City.Id = searchCity.Id;
+            if (searchCity == null) searchCity = new() { Id = 0, Description = address.City.Description };
+            address.City = searchCity;
 
             try
             {
@@ -41,7 +43,7 @@ namespace AndreTurismoApp.Services
         {
             try
             {
-                HttpResponseMessage response = await addressClient.GetAsync("https://localhost:5001/api/Addresses");
+                HttpResponseMessage response = await addressClient.GetAsync(endpoint);
                 response.EnsureSuccessStatusCode();
                 string address = await response.Content.ReadAsStringAsync();
                 return JsonConvert.DeserializeObject<List<Address>>(address);
@@ -56,7 +58,7 @@ namespace AndreTurismoApp.Services
         {
             try
             {
-                HttpResponseMessage response = await addressClient.GetAsync("https://localhost:5001/api/Addresses/" + id);
+                HttpResponseMessage response = await addressClient.GetAsync(endpoint + id);
                 response.EnsureSuccessStatusCode();
                 string address = await response.Content.ReadAsStringAsync();
                 return JsonConvert.DeserializeObject<Address>(address);
@@ -69,9 +71,12 @@ namespace AndreTurismoApp.Services
 
         public async Task<Address> Update(int id, Address newAddress)
         {
+            var city = await _cityService.FindById(newAddress.City.Id);
+            newAddress.City = city;
+
             try
             {
-                HttpResponseMessage response = await addressClient.PutAsJsonAsync("https://localhost:5001/api/Addresses/" + id, newAddress);
+                HttpResponseMessage response = await addressClient.PutAsJsonAsync(endpoint + id, newAddress);
                 response.EnsureSuccessStatusCode();
                 string addressResp = await response.Content.ReadAsStringAsync();
                 return JsonConvert.DeserializeObject<Address>(addressResp);
@@ -86,7 +91,7 @@ namespace AndreTurismoApp.Services
         {
             try
             {
-                HttpResponseMessage response = await addressClient.DeleteAsync("https://localhost:5001/api/Addresses/" + id);
+                HttpResponseMessage response = await addressClient.DeleteAsync(endpoint + id);
                 response.EnsureSuccessStatusCode();
                 string address = await response.Content.ReadAsStringAsync();
             }
