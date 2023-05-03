@@ -86,10 +86,10 @@ namespace AndreTurismoApp.CityService.Controllers
         [HttpPost]
         public async Task<ActionResult<City>> PostCity(City city)
         {
-          if (_context.City == null)
-          {
-              return Problem("Entity set 'AndreTurismoAppCityServiceContext.City'  is null.");
-          }
+            if (_context.City == null)
+            {
+                return Problem("Entity set 'AndreTurismoAppCityServiceContext.City'  is null.");
+            }
             _context.City.Add(city);
             await _context.SaveChangesAsync();
 
