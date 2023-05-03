@@ -132,12 +132,13 @@ namespace AndreTurismoApp.AddressService.Controllers
             _context.Address.Add(address);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetAddress", new { id = address.Id }, address);
+            //return CreatedAtAction("GetAddress", new { id = address.Id }, address);
+            return address;
         }
 
         // DELETE: api/Addresses/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAddress(int id)
+        public async Task<ActionResult<Address>> DeleteAddress(int id)
         {
             if (_context.Address == null)
             {
