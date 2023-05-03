@@ -1,5 +1,7 @@
-﻿using System.Text;
+﻿using System.Net;
+using System.Text;
 using AndreTurismoApp.Models;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
 using Newtonsoft.Json;
 using static System.Net.WebRequestMethods;
 
@@ -49,6 +51,25 @@ namespace AndreTurismoApp.Services
                 response.EnsureSuccessStatusCode();
                 string city = await response.Content.ReadAsStringAsync();
                 return JsonConvert.DeserializeObject<City>(city);
+            }
+            catch (HttpRequestException e)
+            {
+                throw;
+            }
+        }
+
+        public async Task<City> FindByName(string name)
+        {
+            try
+            {
+                HttpResponseMessage response = await cityClient.GetAsync("https://localhost:5002/api/Cities/name/" + name);
+                response.EnsureSuccessStatusCode();
+                string city = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<City>(city);
+            }
+            catch (HttpRequestException e) when (e.StatusCode == HttpStatusCode.NotFound)
+            {
+                return null;
             }
             catch (HttpRequestException e)
             {

@@ -36,11 +36,29 @@ namespace AndreTurismoApp.CityService.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<City>> GetCity(int id)
         {
-          if (_context.City == null)
-          {
-              return NotFound();
-          }
+            if (_context.City == null)
+            {
+                return NotFound();
+            }
             var city = await _context.City.FindAsync(id);
+
+            if (city == null)
+            {
+                return NotFound();
+            }
+
+            return city;
+        }
+
+        // GET: api/Cities/5
+        [HttpGet("name/{name}", Name = "GetCityByName")]
+        public async Task<ActionResult<City>> GetCityByName(string name)
+        {
+            if (_context.City == null)
+            {
+                return NotFound();
+            }
+            var city = await _context.City.Where(c => c.Description == name).FirstOrDefaultAsync();
 
             if (city == null)
             {
