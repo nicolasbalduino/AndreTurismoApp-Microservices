@@ -20,7 +20,7 @@ namespace AndreTurismoApp.AddressService.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Address>().HasOne(a => a.City).WithOne().HasForeignKey<Address>("CityId").OnDelete(DeleteBehavior.NoAction); 
+            modelBuilder.Entity<Address>().HasOne(a => a.City).WithOne().HasForeignKey<Address>("CityId").OnDelete(DeleteBehavior.NoAction);
         }
     }
 }

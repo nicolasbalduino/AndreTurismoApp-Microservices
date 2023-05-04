@@ -11,11 +11,13 @@ namespace AndreTurismoApp.Controllers
     {
         private AddressService _addressService;
         private CityService _cityService;
+        private PostOfficesService _postOfficeService;
 
         public AddressController()
         {
             _addressService = new AddressService();
             _cityService = new CityService();
+            _postOfficeService = new PostOfficesService();
         }
 
         [HttpGet]
@@ -25,15 +27,10 @@ namespace AndreTurismoApp.Controllers
         public async Task<Address> ConsultarPorId(int id) => await _addressService.FindById(id);
 
         [HttpPost]
-        public async Task<Address> Inserir(Address address) => await _addressService.Insert(address);
+        public async Task<ActionResult<Address>> Inserir(Address address) => await _addressService.Insert(address);
 
         [HttpPut("{id}")]
-        public async Task<Address> Atualizar(int id, Address address)
-        {
-            var city = await _cityService.FindById(address.City.Id);
-            address.City = city;
-            return await _addressService.Update(id, address);
-        }
+        public async Task<Address> Atualizar(int id, Address address) => await _addressService.Update(id, address);
 
         [HttpDelete("{id}")]
         public async Task Deletar(int id) => await _addressService.Delete(id);

@@ -86,7 +86,8 @@ namespace AndreTurismoApp.Test
             {
                 AddressesController addressController = new AddressesController(context, new PostOfficesService());
                 Address ad = addressController.PostAddress(address).Result.Value;
-                Assert.Equal("Avenida Alberto Benassi", ad.Street);
+                //Assert.Equal("Avenida Alberto Benassi", ad.Street);
+                Assert.Equal("Rua 10", ad.Street);
             }
         }
 

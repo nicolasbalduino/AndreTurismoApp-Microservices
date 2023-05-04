@@ -36,11 +36,29 @@ namespace AndreTurismoApp.CityService.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<City>> GetCity(int id)
         {
-          if (_context.City == null)
-          {
-              return NotFound();
-          }
+            if (_context.City == null)
+            {
+                return NotFound();
+            }
             var city = await _context.City.FindAsync(id);
+
+            if (city == null)
+            {
+                return NotFound();
+            }
+
+            return city;
+        }
+
+        // GET: api/Cities/5
+        [HttpGet("name/{name}", Name = "GetCityByName")]
+        public async Task<ActionResult<City>> GetCityByName(string name)
+        {
+            if (_context.City == null)
+            {
+                return NotFound();
+            }
+            var city = await _context.City.Where(c => c.Description == name).FirstOrDefaultAsync();
 
             if (city == null)
             {
@@ -53,7 +71,7 @@ namespace AndreTurismoApp.CityService.Controllers
         // PUT: api/Cities/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutCity(int id, City city)
+        public async Task<ActionResult<City>> PutCity(int id, City city)
         {
             if (id != city.Id)
             {
@@ -78,7 +96,7 @@ namespace AndreTurismoApp.CityService.Controllers
                 }
             }
 
-            return NoContent();
+            return city;
         }
 
         // POST: api/Cities
@@ -86,19 +104,20 @@ namespace AndreTurismoApp.CityService.Controllers
         [HttpPost]
         public async Task<ActionResult<City>> PostCity(City city)
         {
-          if (_context.City == null)
-          {
-              return Problem("Entity set 'AndreTurismoAppCityServiceContext.City'  is null.");
-          }
+            if (_context.City == null)
+            {
+                return Problem("Entity set 'AndreTurismoAppCityServiceContext.City'  is null.");
+            }
             _context.City.Add(city);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetCity", new { id = city.Id }, city);
+            //return CreatedAtAction("GetCity", new { id = city.Id }, city);
+            return city;
         }
 
         // DELETE: api/Cities/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteCity(int id)
+        public async Task<ActionResult<City>> DeleteCity(int id)
         {
             if (_context.City == null)
             {

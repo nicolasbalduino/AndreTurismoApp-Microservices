@@ -57,12 +57,12 @@ namespace AndreTurismoApp.AddressService.Controllers
             return address;
         }
 
-        // GET: api/cep/15910000
-        //[HttpGet("{cep}")]
-        //public async Task<ActionResult<AddressDTO>> GetAddress(string cep)
-        //{
-        //    return await _postOfficesService.GetAddress(cep);
-        //}
+        //GET: api/cep/15910000
+        [HttpGet("/cep/{cep}")]
+        public async Task<ActionResult<AddressDTO>> GetAddress(string cep)
+        {
+            return await _postOfficesService.GetAddress(cep);
+        }
 
         // PUT: api/Addresses/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
@@ -76,7 +76,7 @@ namespace AndreTurismoApp.AddressService.Controllers
 
             var newAddress = await _context.Address.Include(a => a.City).Where(a => a.Id == id).FirstOrDefaultAsync();
             newAddress.Street = address.Street;
-            newAddress.City = address.City;
+            newAddress.City = address.City.Id != newAddress.City.Id ? address.City : newAddress.City;
             newAddress.PostalCode = address.PostalCode;
             newAddress.Number = address.Number;
             newAddress.Neighborhood = address.Neighborhood;
@@ -112,27 +112,19 @@ namespace AndreTurismoApp.AddressService.Controllers
             {
                 return Problem("Entity set 'AndreTurismoAppAddressServiceContext.Address'  is null.");
             }
-
-            var addressExists = await _context.Address.Where(a => a.Id == address.Id).FirstOrDefaultAsync();
-            if (addressExists != null) return addressExists;
-
-            AddressDTO addressDTO = await _postOfficesService.GetAddress(address.PostalCode);
-            address.Neighborhood = addressDTO.Bairro != "" ? addressDTO.Bairro : address.Neighborhood;
-            address.Street = addressDTO.Logradouro != "" ? addressDTO.Logradouro : address.Street;
-
-            var city = await _context.City.Where(c => c.Description == addressDTO.City).FirstOrDefaultAsync();
-            if (city == null) 
+            
+            if (address.Id != 0)
             {
-                city = new City();
-                city.Description = addressDTO.City;
+                var addressExists = await _context.Address.Where(a => a.Id == address.Id).FirstOrDefaultAsync();
+                if (addressExists != null) return addressExists;
             }
 
+            var city = await _context.City.Where(c => c.Description == address.City.Description).FirstOrDefaultAsync();
+            if (city == null) city = new City() { Description = address.City.Description };
             address.City = city;
 
             _context.Address.Add(address);
             await _context.SaveChangesAsync();
-
-            //return CreatedAtAction("GetAddress", new { id = address.Id }, address);
             return address;
         }
 

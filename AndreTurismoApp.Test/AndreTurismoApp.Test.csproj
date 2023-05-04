@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -25,6 +25,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AndreTurismoApp.AddressService\AndreTurismoApp.AddressService.csproj" />
+    <ProjectReference Include="..\AndreTurismoApp.CityService\AndreTurismoApp.CityService.csproj" />
+    <ProjectReference Include="..\AndreTurismoApp.HotelService\AndreTurismoApp.HotelService.csproj" />
   </ItemGroup>
 
 </Project>
