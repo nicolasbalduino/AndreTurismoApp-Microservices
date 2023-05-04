@@ -7,8 +7,8 @@ namespace AndreTurismoApp.Services
     public class HotelService
     {
         static readonly HttpClient hotelClient = new HttpClient();
-        static readonly AddressService _addressService = new AddressService();
         static readonly string endpoint = "https://localhost:5003/api/hotels/";
+        static readonly AddressService _addressService = new AddressService();
 
         public async Task<Hotel> Insert(Hotel hotel)
         {
