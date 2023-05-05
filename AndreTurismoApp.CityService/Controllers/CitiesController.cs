@@ -7,6 +7,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using AndreTurismoApp.CityService.Data;
 using AndreTurismoApp.Models;
+using Newtonsoft.Json;
+using System.Net;
+using System.Reflection.Metadata;
 
 namespace AndreTurismoApp.CityService.Controllers
 {
@@ -101,6 +104,28 @@ namespace AndreTurismoApp.CityService.Controllers
 
         // POST: api/Cities
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        [HttpPost("/api​/Cities/rabbit/", Name = "InsertRabbit")]
+        public async Task<ActionResult<City>> PostCityRabbit(City city)
+        {
+            try
+            {
+                string endpoint = "https://localhost:7195/api/Cities";
+                HttpClient cityClient = new HttpClient();
+                HttpResponseMessage response = await cityClient.PostAsJsonAsync(endpoint, city);
+                response.EnsureSuccessStatusCode();
+                string cityResp = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<City>(cityResp);
+            }
+            catch (Exception e)
+            {
+
+                throw;
+            }
+
+            return NotFound();
+
+        }
+
         [HttpPost]
         public async Task<ActionResult<City>> PostCity(City city)
         {
@@ -111,7 +136,6 @@ namespace AndreTurismoApp.CityService.Controllers
             _context.City.Add(city);
             await _context.SaveChangesAsync();
 
-            //return CreatedAtAction("GetCity", new { id = city.Id }, city);
             return city;
         }
 

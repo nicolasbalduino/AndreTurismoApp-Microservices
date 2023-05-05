@@ -17,7 +17,7 @@ namespace AndreTurismoApp.Services
             HttpContent content = new StringContent(JsonConvert.SerializeObject(city), Encoding.UTF8, "application/json");
             try
             {
-                HttpResponseMessage response = await cityClient.PostAsync(endpoint, content);
+                HttpResponseMessage response = await cityClient.PostAsJsonAsync("https://localhost:5002/api​/Cities/rabbit", city);
                 response.EnsureSuccessStatusCode();
                 string cityResp = await response.Content.ReadAsStringAsync();
                 return JsonConvert.DeserializeObject<City>(cityResp);
